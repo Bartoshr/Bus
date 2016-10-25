@@ -1,0 +1,50 @@
+
+<style>
+
+*{
+  	padding: 0;
+  	margin: 0;
+}
+
+body {
+  	color:#fff;
+  	font-family: 'Roboto', sans-serif;
+  	background: #282828;
+}
+
+.first {
+  	background:red;
+}
+
+#container{
+  	position: absolute;
+  	top: 40%;
+  	left: 50%;
+  	transform: translateX(-50%) translateY(-50%);
+  	text-align:center;
+  	width: 70%;	
+	margin: 0 auto;
+}
+
+#list {
+	padding:0;
+	margin:0;
+  	list-style-type: none;
+  	font-size: 128px;
+}
+
+#hour {
+	margin: 0;
+    padding: 0;
+    text-align:center;
+    font-size: 128px;
+}
+
+#direction {
+	margin-bottom:50px;
+    /*padding-top:50px;*/
+    text-align:center;
+    font-size: 72px;
+}
+
+</style>
