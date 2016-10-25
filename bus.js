@@ -1,5 +1,7 @@
 
 var lastMinute = -1;
+var id = "home";
+
 window.onload = function() {
 	// handleRefresh();
 	// setInterval(handleRefresh, 3000);
@@ -20,9 +22,8 @@ function updateSchedule(data){
 }
 
 function onDirectionClick(){
-   var value = (document.getElementById('path').innerHTML == "work")? "home" : "work";
-   document.getElementById('path').innerHTML = value;
-	
+   id = (id == "work")? "home" : "work";
+   update();
 }
 
 function getDirection(){
@@ -30,7 +31,7 @@ function getDirection(){
  }
 
 function update(){
-	var url = "https://script.google.com/macros/s/AKfycbxLfPvkUE6x_ROTRVU_UjlZojvj71TYJdWonQj_dFc/exec?callback=updateSchedule&direction=work";
+	var url = "https://script.google.com/macros/s/AKfycbxLfPvkUE6x_ROTRVU_UjlZojvj71TYJdWonQj_dFc/exec?callback=updateSchedule&direction="+id;
 		
 	var newScript = document.createElement("script");
 	newScript.setAttribute("src", url);
