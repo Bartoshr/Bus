@@ -1,37 +1,44 @@
-
-var lastMinute = -1;
 var id = "home";
+var timetable;
 
 window.onload = function() {
 	// handleRefresh();
 	// setInterval(handleRefresh, 3000);
-	update();
-	setInterval(function() {
-		  var minute = (new Date()).getMinutes();
-		  if(lastMinute != minute){
-		      update();
-		      lastMinute=minute;
-		    }
-	},  100);
+	fetchData();
 }
 
-function updateSchedule(data){
-    createList(data.timetable, data.next, 3); 
+function loadTimetable(data){
+	timetable = data.timetable;
+	var index = data.timetable.findIndex(notPast);
+    createList(timetable, index, 3);
+	
     var directionTag = document.getElementById('direction');
     directionTag.innerHTML = data.title;
+	
+	setInterval(update,  500);
 }
 
 function onDirectionClick(){
    id = (id == "work")? "home" : "work";
-   update();
+   fetchData();
 }
 
 function getDirection(){
     return document.getElementById('path').innerHTML;
  }
+ 
+ function update(){
+ 	var index = timetable.findIndex(notPast);
+    createList(timetable, index, 3);
+ }
+ 
+ function notPast(item){
+	 var d = new Date();
+	 return (d.getMinutes()+(60*d.getHours())) <= (item.minute+(60*item.hour));
+ }
 
-function update(){
-	var url = "https://script.google.com/macros/s/AKfycbxLfPvkUE6x_ROTRVU_UjlZojvj71TYJdWonQj_dFc/exec?callback=updateSchedule&direction="+id;
+function fetchData(){
+	var url = "https://script.google.com/macros/s/AKfycbxLfPvkUE6x_ROTRVU_UjlZojvj71TYJdWonQj_dFc/exec?callback=loadTimetable&direction="+id;
 		
 	var newScript = document.createElement("script");
 	newScript.setAttribute("src", url);
