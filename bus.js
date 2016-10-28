@@ -9,7 +9,7 @@ window.onload = function() {
 
 function onDataLoaded(data){
 	timetables[data.tag] = {timetable: data.timetable, title: data.title};
-	console.log(Object.keys(timetables).length);
+	// console.log(Object.keys(timetables).length);
 		
 	if (Object.keys(timetables).length == 2) {
 		timetable = timetables[id].timetable;
@@ -32,13 +32,15 @@ function setDirection(title){
  function update(){
 	timetable = timetables[id].timetable;
  	var index = timetable.findIndex(notPast);
+	if(index == -1) index = 1;
+	
 	setDirection(timetables[id].title);
     createList(timetable, index, 3);
 	setTitle(index);
  }
  
  function setTitle(n){
-	 var left = remains(timetable[n].hour, timetable[n].minute)
+	 var left = remains(timetable[n].hour, timetable[n].minute);
 	 document.title = "Bus / "+left+" min";
  }
 

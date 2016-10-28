@@ -22,7 +22,7 @@ body {
   	left: 50%;
   	transform: translateX(-50%) translateY(-50%);
   	text-align:center;
-  	width: 70%;	
+  	width: 80%;	
 	margin: 0 auto;
 }
 
@@ -31,6 +31,8 @@ body {
 	margin:0;
   	list-style-type: none;
   	font-size: 9vmax;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 #direction {
