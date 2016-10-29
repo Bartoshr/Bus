@@ -106,10 +106,14 @@ function remains(hour,min){
   var d = new Date();
   var nhour = d.getHours()
   var nmin = d.getMinutes();
-  if(nhour == hour) {
-          return (min-nmin);
-    } else {
-          var dhour = Math.abs(hour-nhour);
-          return ((dhour*60)-nmin)+min;
-   }
+  
+  if (((hour*60)+min)>((nhour*60)+nmin))
+  return ((hour*60)+min)-((nhour*60)+nmin);
+  else return (24*60-((nhour*60)+nmin))+((hour*60)+min);
+  // if(nhour == hour) {
+  //         return (min-nmin);
+  //   } else {
+  //         var dhour = Math.abs(hour-nhour);
+  //         return ((dhour*60)-nmin)+min;
+  //  }
 }
