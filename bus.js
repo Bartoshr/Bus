@@ -31,6 +31,7 @@ function onDataLoaded(data){
 
 function onDirectionClick(){
    id = (id == "work")? "home" : "work";
+   shift = 0;
    update();
 }
 
@@ -72,6 +73,7 @@ function fetchData(id){
 function onItemClick(item){
 	if(item.target.getAttribute('id') == 'first') shift-=1;
 	if(item.target.getAttribute('id') == 'last') shift+=1;
+	if(item.target.getAttribute('id') == 'middle') shift=0;
 	update();
 }
 
@@ -95,6 +97,7 @@ function createList(schedule, index, count){
 		  
 		  if(i == index) li.setAttribute("class","marked");
           if(i == index+shift) li.setAttribute("id","first");
+		  if(i > index+shift && i < index+count+shift-1) li.setAttribute("id","middle");
           if(i == index+count+shift-1) li.setAttribute("id","last");
 		  
           ul.appendChild(li);
