@@ -40,5 +40,7 @@
   ],
   "start_url": "index.html",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "theme_color": "#282828",
+  "background_color": "#282828"
 }
