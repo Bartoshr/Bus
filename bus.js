@@ -9,8 +9,8 @@ var index;
 // count of results between standard display and shited one
 var shift = 0;
 
-// index of last bus arrival that was displayed in notification
-var lastNotified = -1;
+// index of bus arrivel which should be diplayed in notification
+var notifyIndex = -1;
 
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
@@ -35,6 +35,7 @@ function onDataLoaded(data) {
 function onDirectionClick() {
    id = (id == 'work') ? 'home' : 'work';
    shift = 0;
+   notifyIndex = -1;
    update();
 }
 
@@ -81,22 +82,32 @@ function onItemClick(item) {
 	update();
 }
 
+function onItemLongPress(item) {
+	var localIndex = 0;
+	if (item.target.getAttribute('id') == 'first') localIndex = 0;
+	if (item.target.getAttribute('id') == 'last') localIndex = 2;
+	if (item.target.getAttribute('id') == 'middle') localIndex = 1;
+	notifyIndex = index+localIndex+shift;
+	update();
+}
+
 function showNotificationOnTime(n) {
 	var left = remains(timetable[n].hour, timetable[n].minute);
-	if (left <= 10 && lastNotified != index) {
+	console.log("left : "+left+", n = "+n+" notifyIndex: "+notifyIndex);
+	if (left <= 10 && notifyIndex == n) {
 		if (window.Notification && Notification.permission !== 'denied') {
 			Notification.requestPermission(function(status) {  // status is "granted", if accepted by user
-				var n = new Notification('Title', {
-					body: 'I am the body text!',
-					icon: '/path/to/icon.png' // optional
+				var n = new Notification('Bus / '+ left + ' min', {
+					body: 'Hurry up',
+					icon: 'icons/ic_launcher_96.png' // optional
 				});
 			});
 		}
-		lastNotified = index;
-	} else {
-		console.log("Hello");
+		notifyIndex = -1;
 	}
 }
+
+
 
 // Function for List
 
@@ -113,12 +124,18 @@ function createList(schedule, index, count) {
 		  if (index + shift < index) text += ' /'+ formatMinutes(past(schedule[n].hour, schedule[n].minute));
 
           li.appendChild(document.createTextNode(text));
-		  li.addEventListener('click', onItemClick);
+		  li.addEventListener('click', onItemClick)
+		  li.addEventListener('mousedown', onItemLongPressDisp);
+		  li.addEventListener('mouseup', revert);
+		  li.addEventListener('touchstart', onItemLongPressDisp);
+		  li.addEventListener('touchend', revert);
+		  li.addEventListener('touchcancel', revert);
 
 		  if (i == index) li.setAttribute('class', 'marked');
           if (i == index + shift) li.setAttribute('id', 'first');
 		  if (i > index + shift && i < index + count + shift - 1) li.setAttribute('id', 'middle');
           if (i == index + count + shift - 1) li.setAttribute('id', 'last');
+		  if (i == notifyIndex) li.setAttribute('class', 'ringing');
 
           ul.appendChild(li);
        }
@@ -163,3 +180,27 @@ function remains(hour, min) {
   return ((hour * 60) + min) - ((nhour * 60) + nmin);
   else return (24 * 60 - ((nhour * 60) + nmin)) + ((hour * 60) + min);
 }
+
+// Long Press Helper Functions
+
+var timer;
+var istrue = false;
+var delay = 1000; // how much long u have to hold click in MS
+function onItemLongPressDisp(item)
+{
+   istrue = true;
+   timer = setTimeout(function(){ 
+       if(timer)
+       clearTimeout(timer);   
+       if(istrue)
+       {
+           onItemLongPress(item);
+       }
+   }, delay);
+}
+
+function revert()
+{
+   istrue = false;
+}
+

@@ -16,7 +16,11 @@ body {
   	background:red;
 }
 
-li:active {
+.ringing {
+  	background:orange;
+}
+
+li:focus {
 	color:gray;
 }
 
