@@ -17,8 +17,19 @@ Number.prototype.mod = function(n) {
 };
 
 window.onload = function() {
+	
 	fetchData('home');
 	fetchData('work');
+	
+	if ('serviceWorker' in navigator) {
+	     navigator.serviceWorker.register('/sw.js').then(function(registration) {
+	      // Registration was successful
+	      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+	    }, function(err) {
+	      // registration failed :(
+	      console.log('ServiceWorker registration failed: ', err);
+	    });
+	}
 };
 
 function onDataLoaded(data) {
@@ -52,7 +63,7 @@ function setDirection(title) {
 	setDirection(timetables[id].title);
     createList(timetable, index, 3);
 	setTitle(index);
-	showNotificationOnTime(index);
+	showNotification(index);
  }
 
  function setTitle(n) {
@@ -103,6 +114,23 @@ function showNotificationOnTime(n) {
 				});
 			});
 		}
+		notifyIndex = -1;
+	}
+}
+
+function showNotification(n) {
+	var left = remains(timetable[n].hour, timetable[n].minute);
+	console.log("left : "+left+", n = "+n+" notifyIndex: "+notifyIndex);
+	if (left <= 10 && notifyIndex == n) {
+		Notification.requestPermission(function(result) {
+		  if (result === 'granted') {
+		    navigator.serviceWorker.ready.then(function(registration) {
+		      registration.showNotification('Bus / '+ left + ' min', {
+		        icon: 'icons/ic_launcher_96.png'
+		      });
+		    });
+		  }
+		});
 		notifyIndex = -1;
 	}
 }
