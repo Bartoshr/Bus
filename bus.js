@@ -22,7 +22,7 @@ window.onload = function() {
 	fetchData('work');
 	
 	if ('serviceWorker' in navigator) {
-	     navigator.serviceWorker.register('/sw.js').then(function(registration) {
+	     navigator.serviceWorker.register('sw.js').then(function(registration) {
 	      // Registration was successful
 	      console.log('ServiceWorker registration successful with scope: ', registration.scope);
 	    }, function(err) {
@@ -104,7 +104,6 @@ function onItemLongPress(item) {
 
 function showNotificationOnTime(n) {
 	var left = remains(timetable[n].hour, timetable[n].minute);
-	console.log("left : "+left+", n = "+n+" notifyIndex: "+notifyIndex);
 	if (left <= 10 && notifyIndex == n) {
 		if (window.Notification && Notification.permission !== 'denied') {
 			Notification.requestPermission(function(status) {  // status is "granted", if accepted by user
@@ -120,7 +119,6 @@ function showNotificationOnTime(n) {
 
 function showNotification(n) {
 	var left = remains(timetable[n].hour, timetable[n].minute);
-	console.log("left : "+left+", n = "+n+" notifyIndex: "+notifyIndex);
 	if (left <= 10 && notifyIndex == n) {
 		Notification.requestPermission(function(result) {
 		  if (result === 'granted') {
