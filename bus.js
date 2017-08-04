@@ -124,7 +124,8 @@ function showNotification(n) {
 		  if (result === 'granted') {
 		    navigator.serviceWorker.ready.then(function(registration) {
 		      registration.showNotification('Bus / '+ left + ' min', {
-		        icon: 'icons/ic_launcher_96.png'
+		        icon: 'icons/ic_launcher_96.png',
+				badge: 'icons/ic_launcher_96.png'
 		      });
 		    });
 		  }

@@ -17,13 +17,23 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+	
+	if (event.request.url.endsWith('.worker')) {
+	    event.respondWith(new Response('<strong>Ten URL istnieje!</strong>',
+	    {headers:
+	     {"Content-type":"text/html"}
+	   }));
+	  }
+
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
         // Cache hit - return response
+		  
         if (response) {
           return response;
         }
+		console.log("Fetch " + response);
         return fetch(event.request);
       }
     )
