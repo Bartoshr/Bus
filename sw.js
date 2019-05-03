@@ -1,8 +1,5 @@
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
-  '/',
-  'bus.css',
-  'bus.js',
   'https://script.google.com/macros/s/AKfycbxHXrx9YLhONoVk9ZXz9YrvMVJhkk-qI7RwRZv3EM8DYdObrqc/exec?callback=onDataLoaded&direction=home',
   'https://script.google.com/macros/s/AKfycbxHXrx9YLhONoVk9ZXz9YrvMVJhkk-qI7RwRZv3EM8DYdObrqc/exec?callback=onDataLoaded&direction=work',
 ];
@@ -14,6 +11,8 @@ self.addEventListener('install', function(event) {
       .then(function(cache) {
         console.log('Opened cache');
         return cache.addAll(urlsToCache);
+      }, function(err) {
+        console.log(err)
       })
   );
 });
