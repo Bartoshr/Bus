@@ -2,6 +2,7 @@ var id = 'home';
 var timetable;
 var timetables = {};
 
+var UNDEFINED = -1000;
 
 // indicated index of first element
 var index;
@@ -10,7 +11,7 @@ var index;
 var shift = 0;
 
 // index of bus arrivel which should be diplayed in notification
-var notifyIndex = -1;
+var notifyIndex = UNDEFINED;
 
 Number.prototype.mod = function (n) {
 	return ((this % n) + n) % n;
@@ -46,7 +47,7 @@ function onDataLoaded(data) {
 function onDirectionClick() {
 	id = (id == 'work') ? 'home' : 'work';
 	shift = 0;
-	notifyIndex = -1;
+	notifyIndex = UNDEFINED;
 	update();
 }
 
@@ -71,8 +72,22 @@ function setTitle(n) {
 	document.title = 'Bus / ' + left + ' min';
 }
 
+function createQuery(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
+
 function fetchData(id) {
-	var url = 'https://script.google.com/macros/s/AKfycbxHXrx9YLhONoVk9ZXz9YrvMVJhkk-qI7RwRZv3EM8DYdObrqc/exec?callback=onDataLoaded&direction=' + id;
+	params = {
+		callback: "onDataLoaded",
+		direction: id,
+		weekend: isWeekend()
+	}
+	var url = 'https://script.google.com/macros/s/AKfycbxHXrx9YLhONoVk9ZXz9YrvMVJhkk-qI7RwRZv3EM8DYdObrqc/exec?'+createQuery(params);
 	var newScript = document.createElement('script');
 	newScript.setAttribute('src', url);
 	newScript.setAttribute('id', 'jsonp');
@@ -113,7 +128,7 @@ function showNotificationOnTime(n) {
 				});
 			});
 		}
-		notifyIndex = -1;
+		notifyIndex = UNDEFINED;
 	}
 }
 
@@ -130,7 +145,7 @@ function showNotification(n) {
 				});
 			}
 		});
-		notifyIndex = -1;
+		notifyIndex = UNDEFINED;
 	}
 }
 
@@ -177,6 +192,11 @@ function clearList() {
 
 
 // Helper functions
+
+function isWeekend() {
+	day = new Date().getDay();
+	return day == 0 || day == 6;
+}
 
 // add 0 to numbers below 10
 function formatMinutes(deg) {
